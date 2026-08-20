@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { AdminContext } from "../context/AdminContext";
 import { useContext } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,20 +15,26 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(BackendUrl + "/api/admin/admin-login", {
-        email,
-        password,
-      });
+      if (state === "Admin") {
+        const response = await axios.post(
+          BackendUrl + "/api/admin/admin-login",
+          {
+            email,
+            password,
+          },
+        );
 
-      if (response.data.success) {
-        localStorage.setItem("aToken", response.data.token);
-        setAtoken(response.data.token);
-        alert("Login successful");
-      } else {
-        alert("Login failed: " + response.data.message);
+        if (response.data.success) {
+          localStorage.setItem("aToken", response.data.token);
+          setAtoken(response.data.token);
+          toast.success("Login successful");
+        } else {
+          toast.error(response?.data?.message || "Something went wrong");
+        }
       }
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
