@@ -3,7 +3,8 @@ import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcryptjs";
 import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
-const addDoctor = async (req, res) => {
+
+export const addDoctor = async (req, res) => {
   try {
     const {
       name,
@@ -16,8 +17,8 @@ const addDoctor = async (req, res) => {
       availability,
       fees,
       address,
+      image,
     } = req.body;
-    const imageFile = req.file;
 
     if (
       !name ||
@@ -28,7 +29,8 @@ const addDoctor = async (req, res) => {
       !experience ||
       !about ||
       !fees ||
-      !address
+      !address ||
+      !image
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -52,9 +54,9 @@ const addDoctor = async (req, res) => {
       about,
       availability,
       fees,
-      address: JSON.parse(address),
+      address,
       date: Date.now(),
-      // image: imageUrl,
+      image,
     };
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
@@ -68,25 +70,29 @@ const addDoctor = async (req, res) => {
   }
 };
 
-const loginAdmin = async (req, res) => {
+export const loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
     if (
       email !== process.env.ADMIN_EMAIL ||
       password !== process.env.ADMIN_PASSWORD
     ) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
     }
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    return res.status(200).json({ message: "Login successful", token });
+    return res
+      .status(200)
+      .json({ success: true, message: "Login successful", token });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
-
-export { addDoctor, loginAdmin };
