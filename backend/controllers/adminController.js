@@ -34,6 +34,7 @@ export const addDoctor = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: "Invalid Email" });
     }
@@ -60,13 +61,23 @@ export const addDoctor = async (req, res) => {
     };
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
-    return res.status(201).json({ message: "Doctor added successfully" });
-
-    // console.log("BODY:", req.body);
-    // console.log("FILE:", req.file);
-    // return res.status(200).json({ success: true, message: "API is working" });
+    return res
+      .status(201)
+      .json({ success: true, message: "Doctor added successfully" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.error("Add doctor error:", error);
+
+    if (error.code === 11000 && error.keyPattern?.email) {
+      return res.status(409).json({
+        success: false,
+        message: `A doctor with this email "${error.keyValue.email}" already exists.`,
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again.",
+    });
   }
 };
 
@@ -92,6 +103,18 @@ export const loginAdmin = async (req, res) => {
     return res
       .status(200)
       .json({ success: true, message: "Login successful", token });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const allDoctors = async (req, res) => {
+  try {
+    const doctors = await doctorModel.find({}).select("-password");
+    return res.status(200).json({
+      success: true,
+      doctors,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

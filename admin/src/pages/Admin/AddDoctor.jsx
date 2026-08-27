@@ -16,12 +16,13 @@ const AddDoctor = () => {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [about, setAbout] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { BackendUrl, aToken } = useContext(AdminContext);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       if (!docImg) {
         return toast.error("Please upload a doctor image.");
@@ -73,7 +74,7 @@ const AddDoctor = () => {
       );
       console.log("data", data);
       if (data.success) {
-        toast.success(data.message);
+        toast.success(data?.message || "Doctor Added Successfuly");
 
         setDocImg(null);
         setName("");
@@ -90,14 +91,12 @@ const AddDoctor = () => {
     } catch (err) {
       console.error(err);
 
-      if (err.response?.data?.message?.includes("E11000 duplicate key error")) {
-        toast.error(`A doctor with this email: "${email}" already exists!`);
-      } else {
-        toast.error(
-          err.response?.data?.message ||
-            "Something went wrong, please try again.",
-        );
-      }
+      toast.error(
+        err.response?.data?.message ||
+          "Something went wrong, please try again.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -281,9 +280,10 @@ const AddDoctor = () => {
 
         <button
           type="submit"
-          className="bg-primary text-white px-10 py-3 mt-4 rounded-full"
+          disabled={loading}
+          className="bg-primary text-white px-10 py-3 mt-4 rounded-full cursor-pointer"
         >
-          Add doctor
+          {loading ? "Loading..." : "Add Doctor"}
         </button>
       </div>
     </form>
