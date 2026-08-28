@@ -1,5 +1,5 @@
 import validator from "validator";
-import { v2 as cloudinary } from "cloudinary";
+
 import bcrypt from "bcryptjs";
 import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
@@ -98,7 +98,7 @@ export const loginAdmin = async (req, res) => {
         .json({ success: false, message: "Invalid credentials" });
     }
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "8h",
     });
     return res
       .status(200)
@@ -116,6 +116,6 @@ export const allDoctors = async (req, res) => {
       doctors,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };

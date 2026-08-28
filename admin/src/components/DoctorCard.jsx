@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AdminContext } from "../context/AdminContext";
 
 const DoctorCard = ({ doctor }) => {
-  //   const { changeAvailability } = useContext(AdminContext);
+  const { changeAvailability } = useContext(AdminContext);
   return (
     <div className="border border-indigo-200 rounded-xl max-w-56 overflow-hidden cursor-pointer group">
       <img
@@ -15,9 +15,9 @@ const DoctorCard = ({ doctor }) => {
         <p className="text-zinc-600 text-sm">{doctor.speciality}</p>
         <div className="flex items-center mt-2 gap-1 text-sm">
           <input
-            // onChange={() => changeAvailability(doctor._id)}
+            onChange={() => changeAvailability(doctor._id)}
             type="checkbox"
-            // checked={doctor.available}
+            checked={doctor.availability}
           />
           <p>Available</p>
         </div>
