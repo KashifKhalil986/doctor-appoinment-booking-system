@@ -1,18 +1,19 @@
-import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { assets } from '../assets/assets'
+import { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [showMenu, SetShowMenu] = useState(false)
-  const [token, setToken] = useState(true)
-  const [showDropdown, setShowDropdown] = useState(false)
+  const [showMenu, SetShowMenu] = useState(false);
+  const { setToken, token } = useContext(AppContext);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
       <img
-        onClick={() => navigate('/')}
+        onClick={() => navigate("/")}
         src={assets.logo}
         alt="logo"
         className="h-12 cursor-pointer"
@@ -22,7 +23,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            isActive ? 'text-[#5f6FFF]' : 'text-gray-800'
+            isActive ? "text-[#5f6FFF]" : "text-gray-800"
           }
         >
           Home
@@ -31,7 +32,7 @@ const Navbar = () => {
         <NavLink
           to="/doctors"
           className={({ isActive }) =>
-            isActive ? 'text-[#5f6FFF]' : 'text-gray-800'
+            isActive ? "text-[#5f6FFF]" : "text-gray-800"
           }
         >
           All Doctors
@@ -40,7 +41,7 @@ const Navbar = () => {
         <NavLink
           to="/about"
           className={({ isActive }) =>
-            isActive ? 'text-[#5f6FFF]' : 'text-gray-800'
+            isActive ? "text-[#5f6FFF]" : "text-gray-800"
           }
         >
           About
@@ -49,7 +50,7 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={({ isActive }) =>
-            isActive ? 'text-[#5f6FFF]' : 'text-gray-800'
+            isActive ? "text-[#5f6FFF]" : "text-gray-800"
           }
         >
           Contact
@@ -62,28 +63,20 @@ const Navbar = () => {
             className="flex items-center gap-2 cursor-pointer relative"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <img
-              className="w-8 rounded-full"
-              src={assets.profile_pic}
-              alt=""
-            />
-            <img
-              className="w-2.5"
-              src={assets.dropdown_icon}
-              alt=""
-            />
+            <img className="w-8 rounded-full" src={assets.profile_pic} alt="" />
+            <img className="w-2.5" src={assets.dropdown_icon} alt="" />
 
             <div
               className={`absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 ${
-                showDropdown ? 'block' : 'hidden'
+                showDropdown ? "block" : "hidden"
               }`}
             >
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
                 <p
                   className="hover:text-black cursor-pointer"
                   onClick={() => {
-                    navigate('/my-profile')
-                    setShowDropdown(false)
+                    navigate("/my-profile");
+                    setShowDropdown(false);
                   }}
                 >
                   My Profile
@@ -92,8 +85,8 @@ const Navbar = () => {
                 <p
                   className="hover:text-black cursor-pointer"
                   onClick={() => {
-                    navigate('/my-appoinment')
-                    setShowDropdown(false)
+                    navigate("/my-appoinment");
+                    setShowDropdown(false);
                   }}
                 >
                   My Appoinment
@@ -102,8 +95,8 @@ const Navbar = () => {
                 <p
                   className="hover:text-black cursor-pointer"
                   onClick={() => {
-                    setToken(false)
-                    setShowDropdown(false)
+                    setToken(false);
+                    setShowDropdown(false);
                   }}
                 >
                   Logout
@@ -113,7 +106,7 @@ const Navbar = () => {
           </div>
         ) : (
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
             className="bg-[#5f6FFF] text-white px-8 py-3 rounded-full font-light"
           >
             Create account
@@ -129,7 +122,7 @@ const Navbar = () => {
 
         <div
           className={`${
-            showMenu ? 'fixed w-full' : 'h-0 w-0'
+            showMenu ? "fixed w-full" : "h-0 w-0"
           } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
         >
           <div className="flex items-center justify-between px-5 py-6">
@@ -148,8 +141,8 @@ const Navbar = () => {
               onClick={() => SetShowMenu(false)}
               className={({ isActive }) =>
                 isActive
-                  ? 'bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block'
-                  : 'px-4 py-2 rounded inline-block'
+                  ? "bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block"
+                  : "px-4 py-2 rounded inline-block"
               }
             >
               Home
@@ -160,8 +153,8 @@ const Navbar = () => {
               onClick={() => SetShowMenu(false)}
               className={({ isActive }) =>
                 isActive
-                  ? 'bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block'
-                  : 'px-4 py-2 rounded inline-block'
+                  ? "bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block"
+                  : "px-4 py-2 rounded inline-block"
               }
             >
               ALL Doctors
@@ -172,8 +165,8 @@ const Navbar = () => {
               onClick={() => SetShowMenu(false)}
               className={({ isActive }) =>
                 isActive
-                  ? 'bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block'
-                  : 'px-4 py-2 rounded inline-block'
+                  ? "bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block"
+                  : "px-4 py-2 rounded inline-block"
               }
             >
               About
@@ -184,8 +177,8 @@ const Navbar = () => {
               onClick={() => SetShowMenu(false)}
               className={({ isActive }) =>
                 isActive
-                  ? 'bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block'
-                  : 'px-4 py-2 rounded inline-block'
+                  ? "bg-[#5f6FFF] text-white px-4 py-2 rounded inline-block"
+                  : "px-4 py-2 rounded inline-block"
               }
             >
               Contact
@@ -194,7 +187,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

@@ -9,10 +9,9 @@ const AppContextProvider = (props) => {
   const currencySymbol = "Rs ";
   const BackendUrl = import.meta.env.VITE_BACKEND_URL;
   const [doctors, setDoctors] = useState([]);
-  const value = {
-    doctors,
-    currencySymbol,
-  };
+  const [token, setToken] = useState(localStorage.getItem("token") || false);
+  const [userData, setUserData] = useState(false);
+
   const getDoctorsData = async () => {
     try {
       const { data } = await axios.get(BackendUrl + "/api/doctor/list");
@@ -21,10 +20,45 @@ const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+  const loadUserProfileData = async () => {
+    try {
+      const { data } = await axios.get(BackendUrl + "/api/user/get-profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        setUserData(data.userData);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to load user profile",
+      );
+    }
+  };
+
+  const value = {
+    doctors,
+    currencySymbol,
+    token,
+    setToken,
+    BackendUrl,
+    userData,
+    setUserData,
+    loadUserProfileData,
+  };
   useEffect(() => {
     getDoctorsData();
   }, []);
-
+  useEffect(() => {
+    if (token) {
+      loadUserProfileData();
+    } else {
+      setUserData(false);
+    }
+  }, [token]);
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
   );
