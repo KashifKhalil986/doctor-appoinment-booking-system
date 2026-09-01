@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [showMenu, SetShowMenu] = useState(false);
-  const { setToken, token } = useContext(AppContext);
+  const { setToken, token, userData } = useContext(AppContext);
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -58,12 +58,12 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        {token ? (
+        {token && userData ? (
           <div
             className="flex items-center gap-2 cursor-pointer relative"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <img className="w-8 rounded-full" src={assets.profile_pic} alt="" />
+            <img className="w-8 rounded-full" src={userData.image} alt="" />
             <img className="w-2.5" src={assets.dropdown_icon} alt="" />
 
             <div
