@@ -85,7 +85,7 @@ const Navbar = () => {
                 <p
                   className="hover:text-black cursor-pointer"
                   onClick={() => {
-                    navigate("/my-appoinment");
+                    navigate("/my-appointment");
                     setShowDropdown(false);
                   }}
                 >
@@ -97,6 +97,7 @@ const Navbar = () => {
                   onClick={() => {
                     setToken(false);
                     setShowDropdown(false);
+                    localStorage.removeItem("token");
                   }}
                 >
                   Logout
